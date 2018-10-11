@@ -170,7 +170,7 @@ in = "/*" [^*]+
     "{" { return symbol(sym.LLAVEIZQ,new String(yytext()));}
     "}" { return symbol(sym.LLAVEDER,new String(yytext()));}
     "[]" { return symbol(sym.CORCHDOBLE,new String(yytext()));}
-    "()" { return symbol(sym.PARENDOBLE,new String(yytext()));}
+    //"()" { return symbol(sym.PARENDOBLE,new String(yytext()));}
     
 
 

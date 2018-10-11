@@ -36,9 +36,6 @@ public class MiniCsharpLex {
         String path = terminal.next();
         String [] path2 ={path};
         
-        //abro codigo para leer archivo y obtener una lista con los tokens a volcar.
-        
-        
         Reader reader;
         
         reader = new BufferedReader(new FileReader(path));
@@ -47,6 +44,10 @@ public class MiniCsharpLex {
         AnalizadorSintactico Sintactico= new AnalizadorSintactico(miAnalizer);
         
         Sintactico.parse();
+        //abro codigo para leer archivo y obtener una lista con los tokens a volcar.
+        
+        
+        
         
         
        
@@ -56,7 +57,7 @@ public class MiniCsharpLex {
         archivosal = archivosal+".out"; 
         
        /* PrintWriter escribir = new PrintWriter(archivosal, "UTF-8");
-        
+        /
         for (int i = 0;i <= (tokens.size()-1);i++){
             String agregar=tokens.get(i);
             escribir.println(agregar);

@@ -15,8 +15,8 @@ import java.io.IOException;
 public class Lexico {
     
    public static void main(String[] args) throws Exception {
-        String ruta = "/home/cristobal/Documentos/Proyectos Lenguajes/MiniCsharpLex/MiniCsharpLex/src/minicsharplex/Lexer.flex";
-        String[] ruta2 = {"-parser", "AnalizadorSintactico", "/home/cristobal/Documentos/Proyectos Lenguajes/MiniCsharpLex/MiniCsharpLex/src/minicsharplex/Sintax.cup"};
+        String ruta = "/home/cristobal/Documentos/Proyectos Lenguajes/MiniCSharpLex/MiniCsharpLex/src/minicsharplex/Lexer.flex";
+        String[] ruta2 = {"-parser", "AnalizadorSintactico", "/home/cristobal/Documentos/Proyectos Lenguajes/MiniCSharpLex/MiniCsharpLex/src/minicsharplex/Sintax.cup"};
         Generador(ruta,ruta2);
     }
 
