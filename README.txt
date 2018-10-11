@@ -1,3 +1,2 @@
-Este programa basicamente trabaja en modo terminal esto quiere decir que pedira la ruta del archivo que leera, luego de esto se prepara para ser leido y se envia la clase AnalizadorLexico, en donde se encuentra todo el codigo generado por JFlex, de esta manera se compara con varias expresiones regulares las cuales  son las reglas de MiniC#. Luego de esto se guarda en una lista enlazada y esta se retorna a la clase principal (MiniCsharpLex), en donde es escrita en un nuevo archivo salida, con el nombre que el usuario indique y formato .txt
-
-Este programa funciona correctamente ya que fue trabajado con mucha dedicacion y fue empezado al dia siguiente de que fue solicitado, de esta manera hubo mucho tiempo para realizar pruebas y perfeccionar el software.
+El analizador sintactico maneja los errores utilizando los metodos por defecto que la biblioteca cup utiliza, solamente fue necesario hacer unos cambios en ella para que muestre de mejor manera los errores utilizando linea, columna. 
+.

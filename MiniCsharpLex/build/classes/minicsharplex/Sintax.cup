@@ -1,0 +1,204 @@
+ /* ---------------Seccion de declaraciones preliminares--------------------*/
+package minicsharplex;
+
+/* Import the class java_cup.runtime.*  */
+import java_cup.runtime.*;
+import java.io.FileReader;
+
+   
+/* Codigo del parser, se copia integramente a la clase final.
+    Agregamos el manejo de errores. */
+parser code {:
+	 /* Reporte de error encontrado. */
+    int errorCounter=0;
+    public void syntax_error(Symbol s){
+      errorCounter++;
+
+        report_error("Error de Sintaxis recuperable No" + errorCounter + ".Linea: " + (s.left+1) + "Columna: " + (s.right+1) + ". Texto: \""+ s.value + "\"", null);
+    }
+   
+    /* Cuando se encuentra un error de donde el sistema no puede
+        recuperarse, se lanza un error fatal. Se despliega el mensaje
+        de error y se finaliza la ejecucion. */
+    public void unrecovered_Syntax_error(Symbol s)throws java.lang.Exception {
+        report_error("Error de sintaxis no recuperable No" + errorCounter + ".Linea: " + (s.left+1) + "Columna: " + (s.right+1) + ". Texto: \""+ s.value + "\"",null);
+    }
+
+    /* Metodo main para garantizar la ejecucion del analizador
+       lexico y sintactico, ademas que se pase como parametro la tabla
+       de simbolos correspondiente. */
+   
+   
+   
+:};
+
+/* ------------Declaracion de simbolos terminales y no terminales---------- */
+   
+/* Terminales (tokens obtenidos por el analizador lexico).  
+
+   Terminales que no tienen un valor son listados primero, los terminales que
+   tienen un valor como los enteros son listados en la segunda o demas lineas. */
+terminal           PLUS, MINUS, MULTI, DIV, MOD, MINOR, MINOREQ ,MAJOR, MAJOREQ, ASIGNATION, EQUAL, NOTEQUAL, AND, OR, ADMIRATION, SEMICOLON, COMMA, POINT, CORCHIZQ, CORCHDER, PARENIZQ, PARENDER, LLAVEIZQ, LLAVEDER, CORCHDOBLE, PARENDOBLE, VOID, INT, DOUBLE, BOOL, STRING, CLASS, INTERFACE, NULL, THIS, EXTENDS, IMPLEMENTS, FOR, WHILE, IF, ELSE, RETURN, BREAK, NEW, NEWARRAY, PRINT, READINT, READLINE, MALLOC, HEX, ENTERO, BOOLEAN, CADENA, DOBLE, IDENTIFIER, GETBYTE, SETBYTE;
+
+   
+/* No terminales usados en la seccion gramatical. 
+
+   Primero se lista los no terminales que tienen un valor Object y despues
+   se lista los no terminales que tienen un entero. Un Object se refiere a que
+   no tienen tipo, pudiendo ser entero o String. */
+non terminal Object     Start, Program, Decl, VariableDecl, Variable, Type, FunctionDecl, FunctionDeclA, Formals, ClassDecl, ClassDeclA, ClassDeclB, ClassDeclC, ImpID, Field, InterfaceDecl, InterfaceDeclA,  Prototype, PrototypeA, StmtBlock, StmtBlockA, StmtBlockB, Stmt, IfStmt, StmtExpr, IfStmtA, WhileStmt, ForStmt, ReturnStmt, BreakStmt, PrintStmt, PrintStmtA,  Expr, LValue, Call, CallCont, LibCall, Actuals,  Constant;
+
+   
+
+/* -------------Seccion de predencia y asociacion de los terminales----------- */
+precedence left PLUS, MINUS, MULTI, DIV,  MOD;
+precedence left MINOR, MINOREQ, MAJOR, MAJOREQ, ASIGNATION, EQUAL, NOTEQUAL, AND, OR, ADMIRATION;
+precedence left ELSE;
+precedence left IDENTIFIER;
+
+/* ------------------- Seccion de la gramatica ------------------------ */
+   
+Start ::= Program ;
+
+Program ::= Program Decl
+| /* ε */ ;
+
+Decl ::= VariableDecl
+| FunctionDecl
+| ClassDecl
+| InterfaceDecl ;
+
+VariableDecl ::= Variable SEMICOLON ;
+
+Variable ::= Type IDENTIFIER ;
+
+Type ::= INT
+| DOUBLE
+| BOOL
+| STRING
+| IDENTIFIER
+| Type CORCHDOBLE ;
+
+FunctionDecl ::= Type FunctionDeclA
+| VOID FunctionDeclA ;
+
+FunctionDeclA ::= IDENTIFIER PARENIZQ Formals PARENDER StmtBlock ;
+
+Formals ::= Formals COMMA Variable
+| Variable
+| /* ε */ ;
+
+ClassDecl ::= CLASS IDENTIFIER ClassDeclA ClassDeclB LLAVEIZQ ClassDeclC LLAVEDER;
+
+ClassDeclA ::= EXTENDS IDENTIFIER
+| /* ε */ ;
+
+ClassDeclB ::= IMPLEMENTS ImpID
+| /* ε */ ;
+
+ImpID ::= ImpID COMMA IDENTIFIER
+| IDENTIFIER ;
+
+ClassDeclC ::= ClassDeclC Field
+| /* ε */ ;
+
+Field ::= VariableDecl
+| FunctionDecl ;
+
+InterfaceDecl ::= INTERFACE IDENTIFIER LLAVEIZQ InterfaceDeclA LLAVEDER ;
+
+InterfaceDeclA ::= InterfaceDeclA Prototype
+| /* ε */ ;
+
+Prototype ::= Type PrototypeA
+| VOID PrototypeA;
+
+PrototypeA ::= IDENTIFIER PARENIZQ Formals PARENDER SEMICOLON ;
+
+StmtBlock ::= LLAVEIZQ StmtBlockA StmtBlockB LLAVEDER ;
+
+StmtBlockA ::= StmtBlockA VariableDecl
+| /* ε */ ;
+
+StmtBlockB ::= Stmt StmtBlockB
+| /* ε */ ;
+
+Stmt ::= StmtExpr SEMICOLON
+| IfStmt
+| WhileStmt
+| ForStmt
+| BreakStmt
+| ReturnStmt
+| PrintStmt
+| StmtBlock ;
+
+StmtExpr ::= Expr
+| /* ε */ ;
+
+IfStmt ::= IF PARENIZQ Expr PARENDER Stmt IfStmtA ;
+
+IfStmtA ::= ELSE Stmt
+| /* ε */ ;
+
+WhileStmt ::= WHILE PARENIZQ Expr PARENDER Stmt ;
+
+ForStmt ::= FOR PARENIZQ StmtExpr SEMICOLON Expr SEMICOLON StmtExpr PARENDER Stmt ;
+
+ReturnStmt ::= RETURN StmtExpr SEMICOLON ;
+
+BreakStmt ::= BREAK SEMICOLON ;
+
+PrintStmt ::= PRINT PARENIZQ PrintStmtA PARENDER SEMICOLON ;
+
+PrintStmtA ::= PrintStmtA COMMA Expr
+| Expr ;
+
+Expr ::= LValue ASIGNATION Expr
+| Constant
+| LValue
+| THIS
+| Call 
+| PARENIZQ Expr PARENDER
+| Expr PLUS Expr
+| Expr MINUS Expr
+| Expr MULTI Expr
+| Expr DIV Expr
+| Expr MOD Expr
+| MINUS Expr
+| Expr MINOR Expr
+| Expr MINOREQ Expr
+| Expr MAJOR Expr
+| Expr MAJOREQ Expr
+| Expr EQUAL Expr
+| Expr NOTEQUAL Expr
+| Expr AND Expr
+| Expr OR Expr
+| ADMIRATION Expr
+| NEW PARENIZQ IDENTIFIER PARENDER
+| NEWARRAY PARENIZQ Expr COMMA Type PARENDER
+| READINT PARENDOBLE
+| READLINE PARENDOBLE
+| MALLOC PARENIZQ Expr PARENDER ;
+
+LValue ::= IDENTIFIER
+| Expr POINT IDENTIFIER
+| Expr CORCHIZQ Expr CORCHDER ;
+
+Call ::= IDENTIFIER PARENIZQ Actuals PARENDER
+| Expr POINT IDENTIFIER CallCont
+| Expr POINT LibCall CallCont ;
+
+CallCont ::= PARENIZQ Actuals PARENDER ;
+
+LibCall ::= GETBYTE PARENIZQ Expr PARENDER 
+| SETBYTE PARENIZQ Expr COMMA Expr PARENDER ;
+
+Actuals ::= PrintStmtA
+| /* ε */ ;
+
+Constant ::= ENTERO
+| DOBLE
+| BOOLEAN
+| CADENA
+| NULL 
+| HEX;

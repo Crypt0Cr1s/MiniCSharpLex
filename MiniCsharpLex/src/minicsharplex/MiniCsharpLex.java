@@ -27,37 +27,42 @@ public class MiniCsharpLex {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, Exception {
         // TODO code application logic here
         
         Scanner terminal = new Scanner(System.in);
         
         System.out.print("Ingrese la ruta del archivo a analizar: ");
         String path = terminal.next();
+        String [] path2 ={path};
         
         //abro codigo para leer archivo y obtener una lista con los tokens a volcar.
         
+        
         Reader reader;
+        
         reader = new BufferedReader(new FileReader(path));
+      
         AnalizadorLexico miAnalizer = new AnalizadorLexico(reader);
-        miAnalizer.yylex();
+        AnalizadorSintactico Sintactico= new AnalizadorSintactico(miAnalizer);
         
-        ArrayList<String> tokens = new ArrayList();
-        tokens=miAnalizer.analizar(path);
+        Sintactico.parse();
         
+        
+       
         // codigo para volcar lista tokens a un archivo.
-        System.out.print("Ingrese el nombre del archivo a salir: ");
+        /* System.out.print("Ingrese el nombre del archivo a salir: ");
         String archivosal = terminal.next();
-        archivosal = archivosal+".out";
+        archivosal = archivosal+".out"; 
         
-        PrintWriter escribir = new PrintWriter(archivosal, "UTF-8");
+       /* PrintWriter escribir = new PrintWriter(archivosal, "UTF-8");
         
         for (int i = 0;i <= (tokens.size()-1);i++){
             String agregar=tokens.get(i);
             escribir.println(agregar);
             
         }
-        escribir.close();
+        escribir.close();*/
         
         
        

@@ -14,15 +14,15 @@ import java.io.IOException;
  */
 public class Lexico {
     
-   public static void main(String[] args) {
-        String ruta = "/home/cristobal/Escritorio/MiniCsharpLex/MiniCsharpLex/src/minicsharplex/Lexer.flex";
-
-        Generador(ruta);
+   public static void main(String[] args) throws Exception {
+        String ruta = "/home/cristobal/Documentos/Proyectos Lenguajes/MiniCsharpLex/MiniCsharpLex/src/minicsharplex/Lexer.flex";
+        String[] ruta2 = {"-parser", "AnalizadorSintactico", "/home/cristobal/Documentos/Proyectos Lenguajes/MiniCsharpLex/MiniCsharpLex/src/minicsharplex/Sintax.cup"};
+        Generador(ruta,ruta2);
     }
 
-    public static void Generador(String ruta) {
+    public static void Generador(String ruta,String[] ruta2) throws IOException, Exception {
         File archivo = new File(ruta);
         jflex.Main.generate(archivo);
-
+        java_cup.Main.main(ruta2);
     }
 }
