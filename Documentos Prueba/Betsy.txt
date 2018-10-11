@@ -1,0 +1,43 @@
+/* This is just 
+a simple program 
+with objects */
+
+class Animal {
+  int height; // definición de altura
+  double weight;
+   void Eat() { weight = weight * 2.0;}
+}
+
+class Cow extends Animal {
+  string name;
+  void Moo() { // esta }
+}
+
+int a;
+
+void main() {
+   int b;
+   int a;
+   int d;
+   int INT; // reserved word and ID
+
+   d = .12; // Not a double
+   a = .12E+2; // Not a double
+   INT = 12.E2  // A double 
+   b = 1.12E+-2; // Not a double
+   b = 000003; // An int
+   a = b + 2;
+}
+
+/*    /* an almost-nested comment */
+void main() {
+  class Cow betsy;
+  variable_whose_name_is_much_too_long="hola como estas";
+  betsy = New(Cow);
+  betsy.height = 0xa2 + 0XFa4; // two hexadecimals
+  betsy.weight = 1.456;
+  besty.name = "Betsy";
+  betsy.Moo(); // Go, Betsy!
+}
+
+

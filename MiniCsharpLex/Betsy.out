@@ -1,0 +1,133 @@
+palabraclave: class en linea: 5 columna: 1 - 5
+identificador: Animal en linea: 5 columna: 7 - 12
+puntuacion: { en linea: 5 columna: 14 - 14
+palabraclave: int en linea: 6 columna: 3 - 5
+identificador: height en linea: 6 columna: 7 - 12
+puntuacion: ; en linea: 6 columna: 13 - 13
+palabraclave: double en linea: 7 columna: 3 - 8
+identificador: weight en linea: 7 columna: 10 - 15
+puntuacion: ; en linea: 7 columna: 16 - 16
+palabraclave: void en linea: 8 columna: 4 - 7
+identificador: Eat en linea: 8 columna: 9 - 11
+puntuacion: () en linea: 8 columna: 12 - 13
+puntuacion: { en linea: 8 columna: 15 - 15
+identificador: weight en linea: 8 columna: 17 - 22
+puntuacion: = en linea: 8 columna: 24 - 24
+identificador: weight en linea: 8 columna: 26 - 31
+puntuacion: * en linea: 8 columna: 33 - 33
+Double 2.0 en linea:8 columna: 35 - 37
+puntuacion: ; en linea: 8 columna: 38 - 38
+puntuacion: } en linea: 8 columna: 39 - 39
+puntuacion: } en linea: 9 columna: 1 - 1
+palabraclave: class en linea: 11 columna: 1 - 5
+identificador: Cow en linea: 11 columna: 7 - 9
+palabraclave: extends en linea: 11 columna: 11 - 17
+identificador: Animal en linea: 11 columna: 19 - 24
+puntuacion: { en linea: 11 columna: 26 - 26
+palabraclave: string en linea: 12 columna: 3 - 8
+identificador: name en linea: 12 columna: 10 - 13
+puntuacion: ; en linea: 12 columna: 14 - 14
+palabraclave: void en linea: 13 columna: 3 - 6
+identificador: Moo en linea: 13 columna: 8 - 10
+puntuacion: () en linea: 13 columna: 11 - 12
+puntuacion: { en linea: 13 columna: 14 - 14
+puntuacion: } en linea: 14 columna: 1 - 1
+palabraclave: int en linea: 16 columna: 1 - 3
+identificador: a en linea: 16 columna: 5 - 5
+puntuacion: ; en linea: 16 columna: 6 - 6
+palabraclave: void en linea: 18 columna: 1 - 4
+identificador: main en linea: 18 columna: 6 - 9
+puntuacion: () en linea: 18 columna: 10 - 11
+puntuacion: { en linea: 18 columna: 13 - 13
+palabraclave: int en linea: 19 columna: 4 - 6
+identificador: b en linea: 19 columna: 8 - 8
+puntuacion: ; en linea: 19 columna: 9 - 9
+palabraclave: int en linea: 20 columna: 4 - 6
+identificador: a en linea: 20 columna: 8 - 8
+puntuacion: ; en linea: 20 columna: 9 - 9
+palabraclave: int en linea: 21 columna: 4 - 6
+identificador: d en linea: 21 columna: 8 - 8
+puntuacion: ; en linea: 21 columna: 9 - 9
+palabraclave: int en linea: 22 columna: 4 - 6
+identificador: INT en linea: 22 columna: 8 - 10
+puntuacion: ; en linea: 22 columna: 11 - 11
+identificador: d en linea: 24 columna: 4 - 4
+puntuacion: = en linea: 24 columna: 6 - 6
+puntuacion: . en linea: 24 columna: 8 - 8
+Entero 12 en linea:24 columna: 9 - 10
+puntuacion: ; en linea: 24 columna: 11 - 11
+identificador: a en linea: 25 columna: 4 - 4
+puntuacion: = en linea: 25 columna: 6 - 6
+puntuacion: . en linea: 25 columna: 8 - 8
+Entero 12 en linea:25 columna: 9 - 10
+identificador: E en linea: 25 columna: 11 - 11
+puntuacion: + en linea: 25 columna: 12 - 12
+Entero 2 en linea:25 columna: 13 - 13
+puntuacion: ; en linea: 25 columna: 14 - 14
+identificador: INT en linea: 26 columna: 4 - 6
+puntuacion: = en linea: 26 columna: 8 - 8
+Double 12.E2 en linea:26 columna: 10 - 14
+identificador: b en linea: 27 columna: 4 - 4
+puntuacion: = en linea: 27 columna: 6 - 6
+Double 1.12 en linea:27 columna: 8 - 11
+identificador: E en linea: 27 columna: 12 - 12
+puntuacion: + en linea: 27 columna: 13 - 13
+puntuacion: - en linea: 27 columna: 14 - 14
+Entero 2 en linea:27 columna: 15 - 15
+puntuacion: ; en linea: 27 columna: 16 - 16
+identificador: b en linea: 28 columna: 4 - 4
+puntuacion: = en linea: 28 columna: 6 - 6
+Entero 000003 en linea:28 columna: 8 - 13
+puntuacion: ; en linea: 28 columna: 14 - 14
+identificador: a en linea: 29 columna: 4 - 4
+puntuacion: = en linea: 29 columna: 6 - 6
+identificador: b en linea: 29 columna: 8 - 8
+puntuacion: + en linea: 29 columna: 10 - 10
+Entero 2 en linea:29 columna: 12 - 12
+puntuacion: ; en linea: 29 columna: 13 - 13
+puntuacion: } en linea: 30 columna: 1 - 1
+palabraclave: void en linea: 33 columna: 1 - 4
+identificador: main en linea: 33 columna: 6 - 9
+puntuacion: () en linea: 33 columna: 10 - 11
+puntuacion: { en linea: 33 columna: 13 - 13
+palabraclave: class en linea: 34 columna: 3 - 7
+identificador: Cow en linea: 34 columna: 9 - 11
+identificador: betsy en linea: 34 columna: 13 - 17
+puntuacion: ; en linea: 34 columna: 18 - 18
+identificador truncado variable_whose_name_is_much_too en linea: 35 columna: 3 - 38
+puntuacion: = en linea: 35 columna: 39 - 39
+Cadena "hola como estas" en linea:35 columna: 40 - 56
+puntuacion: ; en linea: 35 columna: 57 - 57
+identificador: betsy en linea: 36 columna: 3 - 7
+puntuacion: = en linea: 36 columna: 9 - 9
+palabraclave: New en linea: 36 columna: 11 - 13
+puntuacion: ( en linea: 36 columna: 14 - 14
+identificador: Cow en linea: 36 columna: 15 - 17
+puntuacion: ) en linea: 36 columna: 18 - 18
+puntuacion: ; en linea: 36 columna: 19 - 19
+identificador: betsy en linea: 37 columna: 3 - 7
+puntuacion: . en linea: 37 columna: 8 - 8
+identificador: height en linea: 37 columna: 9 - 14
+puntuacion: = en linea: 37 columna: 16 - 16
+Hexadecimal 0xa2 en linea:37 columna: 18 - 21
+puntuacion: + en linea: 37 columna: 23 - 23
+Hexadecimal 0XFa4 en linea:37 columna: 25 - 29
+puntuacion: ; en linea: 37 columna: 30 - 30
+identificador: betsy en linea: 38 columna: 3 - 7
+puntuacion: . en linea: 38 columna: 8 - 8
+identificador: weight en linea: 38 columna: 9 - 14
+puntuacion: = en linea: 38 columna: 16 - 16
+Double 1.456 en linea:38 columna: 18 - 22
+puntuacion: ; en linea: 38 columna: 23 - 23
+identificador: besty en linea: 39 columna: 3 - 7
+puntuacion: . en linea: 39 columna: 8 - 8
+identificador: name en linea: 39 columna: 9 - 12
+puntuacion: = en linea: 39 columna: 14 - 14
+Cadena "Betsy" en linea:39 columna: 16 - 22
+puntuacion: ; en linea: 39 columna: 23 - 23
+identificador: betsy en linea: 40 columna: 3 - 7
+puntuacion: . en linea: 40 columna: 8 - 8
+identificador: Moo en linea: 40 columna: 9 - 11
+puntuacion: () en linea: 40 columna: 12 - 13
+puntuacion: ; en linea: 40 columna: 14 - 14
+puntuacion: } en linea: 41 columna: 1 - 1
