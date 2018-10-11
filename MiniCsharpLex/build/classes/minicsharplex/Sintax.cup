@@ -48,7 +48,7 @@ terminal           PLUS, MINUS, MULTI, DIV, MOD, MINOR, MINOREQ ,MAJOR, MAJOREQ,
    Primero se lista los no terminales que tienen un valor Object y despues
    se lista los no terminales que tienen un entero. Un Object se refiere a que
    no tienen tipo, pudiendo ser entero o String. */
-non terminal Object     Start, Program, Decl, VariableDecl, Variable, Type, FunctionDecl, FunctionDeclA, Formals, ClassDecl, ClassDeclA, ClassDeclB, ClassDeclC, ImpID, Field, InterfaceDecl, InterfaceDeclA,  Prototype, PrototypeA, StmtBlock, StmtBlockA, StmtBlockB, Stmt, IfStmt, StmtExpr, IfStmtA, WhileStmt, ForStmt, ReturnStmt, BreakStmt, PrintStmt, PrintStmtA,  Expr, LValue, Call, CallCont, LibCall, Actuals,  Constant;
+non terminal Object     Start, Program, Decl, VariableDecl, Variable, Type, FunctionDecl, FunctionDeclA, Formals, ClassDecl, ClassDeclA, ClassDeclB, ClassDeclC, ImpID, Field, InterfaceDecl, InterfaceDeclA,  Prototype, PrototypeA, StmtBlock, StmtCont,StmtEnd, Stmt, IfStmt, StmtExpr, IfStmtA, WhileStmt, ForStmt, ReturnStmt, BreakStmt, PrintStmt, PrintStmtA,  Expr, LValue, Call, CallCont, LibCall, Actuals,  Constant;
 
    
 
@@ -119,13 +119,13 @@ Prototype ::= Type PrototypeA
 
 PrototypeA ::= IDENTIFIER PARENIZQ Formals PARENDER SEMICOLON ;
 
-StmtBlock ::= LLAVEIZQ StmtBlockA StmtBlockB LLAVEDER ;
+StmtBlock ::= LLAVEIZQ StmtCont LLAVEDER 
+            ;
+StmtCont ::= StmtEnd StmtCont
+        |;
 
-StmtBlockA ::= StmtBlockA VariableDecl
-| /* ε */ ;
-
-StmtBlockB ::= Stmt StmtBlockB
-| /* ε */ ;
+StmtEnd ::=VariableDecl
+|Stmt;
 
 Stmt ::= StmtExpr SEMICOLON
 | IfStmt
