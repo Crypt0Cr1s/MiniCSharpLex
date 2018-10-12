@@ -1,7 +1,8 @@
-cd "/home/cristobal/Documentos/Proyectos Lenguajes/MiniCSharpLex/MiniCsharpLex/src/minicsharplex"
+ruta1=/home/cristobal/Documentos/ProyectosLenguajes/MiniCSharpLex/MiniCsharpLex/src/minicsharplex
+ruta2=/home/cristobal/Documentos/ProyectosLenguajes/MiniCSharpLex/MiniCsharpLex
+cd $ruta1
 rm AnalizadorSintactico.java
 rm sym.java
-cd "/home/cristobal/Documentos/Proyectos Lenguajes/MiniCSharpLex/MiniCsharpLex"
-mv AnalizadorSintactico.java "/home/cristobal/Documentos/Proyectos Lenguajes/MiniCSharpLex/MiniCsharpLex/src/minicsharplex"
-mv sym.java "/home/cristobal/Documentos/Proyectos Lenguajes/MiniCSharpLex/MiniCsharpLex/src/minicsharplex"
-
+cd $ruta2
+mv AnalizadorSintactico.java $ruta1
+mv sym.java $ruta1
