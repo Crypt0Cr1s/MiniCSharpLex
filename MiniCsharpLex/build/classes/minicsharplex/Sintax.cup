@@ -6,10 +6,12 @@ package minicsharplex;
 /* Import the class java_cup.runtime.*  */
 import java_cup.runtime.*;
 import java.io.FileReader;
+import java.util.ArrayList;
    
 /* Codigo del parser, se copia integramente a la clase final.
     Agregamos el manejo de errores. */
 parser code {:
+    
 	 /* Reporte de error encontrado. */
     int errorCounter=0;
     public void syntax_error(Symbol s){
@@ -24,6 +26,8 @@ parser code {:
     public void unrecovered_Syntax_error(Symbol s)throws java.lang.Exception {
         report_error("Error de sintaxis no recuperable No" + errorCounter + ".Linea: " + (s.left+1) + "Columna: " + (s.right+1) + ". Texto: \""+ s.value + "\"",null);
     }
+
+    
 
     /* Metodo main para garantizar la ejecucion del analizador
        lexico y sintactico, ademas que se pase como parametro la tabla
@@ -48,7 +52,7 @@ terminal           PLUS, MINUS, MULTI, DIV, MOD, MINOR, MINOREQ ,MAJOR, MAJOREQ,
    Primero se lista los no terminales que tienen un valor Object y despues
    se lista los no terminales que tienen un entero. Un Object se refiere a que
    no tienen tipo, pudiendo ser entero o String. */
-non terminal Object     Start, Program, Decl, VariableDecl, Variable, Type, FunctionDecl, FunctionDeclA, Formals, ClassDecl, ClassDeclA, ClassDeclB, ClassDeclC, ImpID, Field, InterfaceDecl, InterfaceDeclA,  Prototype, PrototypeA, StmtBlock, StmtCont,StmtEnd, Stmt, IfStmt, StmtExpr, IfStmtA, WhileStmt, ForStmt, ReturnStmt, BreakStmt, PrintStmt, PrintStmtA,  Expr, LValue, Call, CallCont, LibCall, Actuals,  Constant;
+non terminal Object     Start, Program, Decl, VariableDecl, Variable, Type, FunctionDecl, FuncCont, Formals, ClassDecl, Ext, Imp, ClassField, ImpID, Field, InterfaceDecl, InterfaceProt,  Prototype, ProtCont, StmtBlock, StmtCont,StmtEnd, Stmt, IfStmt, StmtExpr, ElseIfStmt, WhileStmt, ForStmt, ReturnStmt, BreakStmt, PrintStmt, ExprPrint,  Expr, LValue, Call, CallCont, LibCall, Actuals,  Constant;
 
    
 
@@ -74,7 +78,10 @@ Decl ::= VariableDecl
 
 VariableDecl ::= Variable SEMICOLON ;
 
-Variable ::= Type IDENTIFIER ;
+Variable ::= Type:e IDENTIFIER:f{:
+                    Reglas enviar=new Reglas();
+                    enviar.ruler(e,f,"Variable");
+            :};
 
 Type ::= INT
 | DOUBLE
@@ -83,41 +90,41 @@ Type ::= INT
 | IDENTIFIER
 | Type CORCHDOBLE ;
 
-FunctionDecl ::= Type FunctionDeclA
-| VOID FunctionDeclA ;
+FunctionDecl ::= Type FuncCont
+| VOID FuncCont;
 
-FunctionDeclA ::= IDENTIFIER PARENIZQ Formals PARENDER StmtBlock ;
+FuncCont ::= IDENTIFIER PARENIZQ Formals PARENDER StmtBlock ;
 
 Formals ::= Formals COMMA Variable
 | Variable
 | /* ε */ ;
 
-ClassDecl ::= CLASS IDENTIFIER ClassDeclA ClassDeclB LLAVEIZQ ClassDeclC LLAVEDER;
+ClassDecl ::= CLASS IDENTIFIER Ext Imp LLAVEIZQ ClassField LLAVEDER;
 
-ClassDeclA ::= EXTENDS IDENTIFIER
+Ext ::= EXTENDS IDENTIFIER
 | /* ε */ ;
 
-ClassDeclB ::= IMPLEMENTS ImpID
+Imp ::= IMPLEMENTS ImpID
 | /* ε */ ;
 
 ImpID ::= ImpID COMMA IDENTIFIER
 | IDENTIFIER ;
 
-ClassDeclC ::= ClassDeclC Field
+ClassField ::= ClassField Field
 | /* ε */ ;
 
 Field ::= VariableDecl
 | FunctionDecl ;
 
-InterfaceDecl ::= INTERFACE IDENTIFIER LLAVEIZQ InterfaceDeclA LLAVEDER ;
+InterfaceDecl ::= INTERFACE IDENTIFIER LLAVEIZQ InterfaceProt LLAVEDER ;
 
-InterfaceDeclA ::= InterfaceDeclA Prototype
+InterfaceProt ::= InterfaceProt Prototype
 | /* ε */ ;
 
-Prototype ::= Type PrototypeA
-| VOID PrototypeA;
+Prototype ::= Type ProtCont
+| VOID ProtCont;
 
-PrototypeA ::= IDENTIFIER PARENIZQ Formals PARENDER SEMICOLON ;
+ProtCont ::= IDENTIFIER PARENIZQ Formals PARENDER SEMICOLON ;
 
 StmtBlock ::= LLAVEIZQ StmtCont LLAVEDER 
             ;
@@ -139,9 +146,9 @@ Stmt ::= StmtExpr SEMICOLON
 StmtExpr ::= Expr
 | /* ε */ ;
 
-IfStmt ::= IF PARENIZQ Expr PARENDER Stmt IfStmtA ;
+IfStmt ::= IF PARENIZQ Expr PARENDER Stmt ElseIfStmt ;
 
-IfStmtA ::= ELSE Stmt
+ElseIfStmt ::= ELSE Stmt
 | /* ε */ ;
 
 WhileStmt ::= WHILE PARENIZQ Expr PARENDER Stmt ;
@@ -152,9 +159,9 @@ ReturnStmt ::= RETURN StmtExpr SEMICOLON ;
 
 BreakStmt ::= BREAK SEMICOLON ;
 
-PrintStmt ::= PRINT PARENIZQ PrintStmtA PARENDER SEMICOLON ;
+PrintStmt ::= PRINT PARENIZQ ExprPrint PARENDER SEMICOLON ;
 
-PrintStmtA ::= PrintStmtA COMMA Expr
+ExprPrint ::= ExprPrint COMMA Expr
 | Expr ;
 
 Expr ::= LValue ASIGNATION Expr
@@ -197,7 +204,7 @@ CallCont ::= PARENIZQ Actuals PARENDER ;
 LibCall ::= GETBYTE PARENIZQ Expr PARENDER 
 | SETBYTE PARENIZQ Expr COMMA Expr PARENDER ;
 
-Actuals ::= PrintStmtA
+Actuals ::= ExprPrint
 | /* ε */ ;
 
 Constant ::= ENTERO

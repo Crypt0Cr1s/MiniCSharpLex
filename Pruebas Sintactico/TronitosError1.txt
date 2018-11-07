@@ -10,7 +10,7 @@ void main(){
 	Parser MyParser;
 	m1=MyParser.f1(1,2.2,"3");
 	while (m1 >= 20) {
-		for (m2=f1(1,2.2,"3");m2=m2+1;(2)) 
+		for (m2=f1(1,2.2,"3");m2=m2+1;(2)); 
 			
 		}
 	Print(this.m2 + 10);

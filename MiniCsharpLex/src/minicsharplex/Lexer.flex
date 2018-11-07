@@ -40,50 +40,19 @@ import java.io.Reader;
 
 %{
 
- ArrayList<String> tokens = new ArrayList();
+ 
+ static ArrayList<Tsimbols> tokens = new ArrayList<>();
+
 
 %}
 
 %{
-/*public ArrayList<String> analizar(String archivoEspecPath) throws IOException {
-
-    FileReader in = null;
-
-    try {
-
-        in = new FileReader(archivoEspecPath);
-
-        AnalizadorLexico analizador = new AnalizadorLexico(in);
-
-        while (!analizador.zzAtEOF) {
-
-        analizador.yylex();
-        
-        }
-
-    } catch (FileNotFoundException ex) {
-
-        Logger.getLogger(AnalizadorLexico.class.getName()).log(Level.SEVERE, null, ex);
-
-    } finally {
-
-    try {
-
-        in.close();
-
-        return tokens;
-
-    } catch     (IOException ex) {
-
-        Logger.getLogger(AnalizadorLexico.class.getName()).log(Level.SEVERE, null, ex);
-
-        return null;
-
-        }
-
-    }
-
-   }*/
+public static ingress (String simbolo, String tipo){
+    
+   Tsimbols outsim = new Tsimbols();
+    outsim.t_simbolo(simbolo, tipo);
+    tokens.add(outsim);
+}
 
 
 %}
@@ -106,10 +75,10 @@ in = "/*" [^*]+
 
 
     {Hex} { return symbol(sym.HEX);}
-    {Int} { return symbol(sym.ENTERO,new String(yytext()));}
-    {Bool} { return symbol(sym.BOOLEAN,new String(yytext()));}
+    {Int} {AnalizadorLexico.ingress(yytext(),entero); return symbol(sym.ENTERO,new Integer(yytext()));}
+    {Bool} { return symbol(sym.BOOLEAN,new Boolean(yytext()));}
     {String} { return symbol(sym.CADENA,new String(yytext()));}
-    {Double} { return symbol(sym.DOBLE,new String(yytext()));}
+    {Double} { return symbol(sym.DOBLE,new Double(yytext()));}
     //{C} {tokens.add("palabraclave: " + yytext() + " en linea: "+(yyline+1)+ " columna: "+ (yycolumn + 1) + " - " + ((yycolumn+1) + yylength() - 1)); return symbol(sym.CLAVE);}
     ////////////////////////////////////////////////////////////////////////////////
     "void" { return symbol(sym.VOID,new String(yytext())); }
