@@ -24,5 +24,6 @@ public class Lexico {
         File archivo = new File(ruta);
         jflex.Main.generate(archivo);
         java_cup.Main.main(ruta2);
+        
     }
 }

@@ -399,14 +399,24 @@ public class AnalizadorLexico implements java_cup.runtime.Scanner {
     }
 
  
- static ArrayList<Tsimbols> tokens = new ArrayList<>();
+ //static ArrayList<Tsimbols> tokens = new ArrayList<>();
 
 
-public static ingress (String simbolo, String tipo){
-   Tsimbols outsim = new Tsimbols();
+/*public static void ingress (String simbolo, String tipo){
+    boolean bandera = false;
+    Tsimbols outsim = new Tsimbols();
     outsim.t_simbolo(simbolo, tipo);
-    tokens.add(outsim);
-}
+        for (int i = 0; i < tokens.size();i++){
+            if (outsim == tokens.get(i)){
+            bandera = true;
+            }
+        }
+
+    if (bandera == false){
+        tokens.add(outsim);
+     }
+    
+}*/
 
 
 
@@ -799,7 +809,7 @@ public static ingress (String simbolo, String tipo){
             }
           case 61: break;
           case 2: 
-            { AnalizadorLexico.ingress(yytext(),entero); return symbol(sym.ENTERO,new Integer(yytext()));
+            { return symbol(sym.ENTERO,new Integer(yytext()));
             }
           case 62: break;
           case 3: 

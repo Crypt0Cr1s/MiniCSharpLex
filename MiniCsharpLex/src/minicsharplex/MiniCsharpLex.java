@@ -31,9 +31,9 @@ public class MiniCsharpLex {
         // TODO code application logic here
         
         Scanner terminal = new Scanner(System.in);
-        ArrayList<Object> tsimbol = new ArrayList();
-        System.out.print("Ingrese la ruta del archivo a analizar: ");
-        String path = terminal.next();
+        
+        //System.out.print("Ingrese la ruta del archivo a analizar: ");
+        String path = "/home/cristobal/p1.txt";
         String [] path2 ={path};
         
         Reader reader;
@@ -42,9 +42,10 @@ public class MiniCsharpLex {
       
         AnalizadorLexico miAnalizer = new AnalizadorLexico(reader);
         AnalizadorSintactico Sintactico= new AnalizadorSintactico(miAnalizer);
-        tsimbol.add(Sintactico.parse().value);
+        Sintactico.parse();
         
         System.out.print("Se ha terminado de analizar.");
+        
         //abro codigo para leer archivo y obtener una lista con los tokens a volcar. 
         
        

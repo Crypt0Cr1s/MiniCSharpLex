@@ -7,7 +7,7 @@ package minicsharplex;
 import java_cup.runtime.*;
 import java.io.FileReader;
 import java.util.ArrayList;
-   
+import minicsharplex.numero;
 /* Codigo del parser, se copia integramente a la clase final.
     Agregamos el manejo de errores. */
 parser code {:
@@ -27,11 +27,19 @@ parser code {:
         report_error("Error de sintaxis no recuperable No" + errorCounter + ".Linea: " + (s.left+1) + "Columna: " + (s.right+1) + ". Texto: \""+ s.value + "\"",null);
     }
 
-    
+    public void sem_error(String lexeme, String message) {
+      errorCounter++;
+      System.err.println("Semantic error");
+      System.err.println("  "+ errorCounter + "==> " + message + ": "+ lexeme + "\n");
+  }
 
+    
+    
+    
     /* Metodo main para garantizar la ejecucion del analizador
        lexico y sintactico, ademas que se pase como parametro la tabla
        de simbolos correspondiente. */
+
    
    
    
@@ -44,7 +52,7 @@ parser code {:
 
    Terminales que no tienen un valor son listados primero, los terminales que
    tienen un valor como los enteros son listados en la segunda o demas lineas. */
-terminal           PLUS, MINUS, MULTI, DIV, MOD, MINOR, MINOREQ ,MAJOR, MAJOREQ, ASIGNATION, EQUAL, NOTEQUAL, AND, OR, ADMIRATION, SEMICOLON, COMMA, POINT, CORCHIZQ, CORCHDER, PARENIZQ, PARENDER, LLAVEIZQ, LLAVEDER, CORCHDOBLE, VOID, INT, DOUBLE, BOOL, STRING, CLASS, INTERFACE, NULL, THIS, EXTENDS, IMPLEMENTS, FOR, WHILE, IF, ELSE, RETURN, BREAK, NEW, NEWARRAY, PRINT, READINT, READLINE, MALLOC, HEX, ENTERO, BOOLEAN, CADENA, DOBLE, IDENTIFIER, GETBYTE, SETBYTE;
+terminal Object PLUS, MINUS, MULTI, DIV, MOD, MINOR, MINOREQ ,MAJOR, MAJOREQ, ASIGNATION, EQUAL, NOTEQUAL, AND, OR, ADMIRATION, SEMICOLON, COMMA, POINT, CORCHIZQ, CORCHDER, PARENIZQ, PARENDER, LLAVEIZQ, LLAVEDER, CORCHDOBLE, VOID, INT, DOUBLE, BOOL, STRING, CLASS, INTERFACE, NULL, THIS, EXTENDS, IMPLEMENTS, FOR, WHILE, IF, ELSE, RETURN, BREAK, NEW, NEWARRAY, PRINT, READINT, READLINE, MALLOC, HEX, ENTERO, BOOLEAN, CADENA, DOBLE, IDENTIFIER, GETBYTE, SETBYTE;
 
    
 /* No terminales usados en la seccion gramatical. 
@@ -52,12 +60,13 @@ terminal           PLUS, MINUS, MULTI, DIV, MOD, MINOR, MINOREQ ,MAJOR, MAJOREQ,
    Primero se lista los no terminales que tienen un valor Object y despues
    se lista los no terminales que tienen un entero. Un Object se refiere a que
    no tienen tipo, pudiendo ser entero o String. */
-non terminal Object     Start, Program, Decl, VariableDecl, Variable, Type, FunctionDecl, FuncCont, Formals, ClassDecl, Ext, Imp, ClassField, ImpID, Field, InterfaceDecl, InterfaceProt,  Prototype, ProtCont, StmtBlock, StmtCont,StmtEnd, Stmt, IfStmt, StmtExpr, ElseIfStmt, WhileStmt, ForStmt, ReturnStmt, BreakStmt, PrintStmt, ExprPrint,  Expr, LValue, Call, CallCont, LibCall, Actuals,  Constant;
+non terminal Object     Start, Program, Decl, VariableDecl, Variable, Type, Expr1,FunctionDecl, FuncCont, Formals, ClassDecl, Ext, Imp, ClassField, ImpID, Field, InterfaceDecl, InterfaceProt,  Prototype, ProtCont, StmtBlock, StmtCont,StmtEnd, Stmt, IfStmt, StmtExpr, ElseIfStmt, WhileStmt, ForStmt, ReturnStmt, BreakStmt, PrintStmt, ExprPrint,  Expr, LValue, Call, CallCont, LibCall, Actuals,  Constant;
 
    
 
 /* -------------Seccion de predencia y asociacion de los terminales----------- */
-precedence left PLUS, MINUS, MULTI, DIV,  MOD;
+precedence left PLUS, MINUS;
+precedence left MULTI, DIV,  MOD;
 precedence left MINOR, MINOREQ, MAJOR, MAJOREQ, ASIGNATION, EQUAL, NOTEQUAL, AND, OR, ADMIRATION;
 precedence left ELSE;
 precedence left IDENTIFIER;
@@ -78,9 +87,8 @@ Decl ::= VariableDecl
 
 VariableDecl ::= Variable SEMICOLON ;
 
-Variable ::= Type:e IDENTIFIER:f{:
-                    Reglas enviar=new Reglas();
-                    enviar.ruler(e,f,"Variable");
+Variable ::= Type IDENTIFIER:n{:
+                    
             :};
 
 Type ::= INT
@@ -99,7 +107,9 @@ Formals ::= Formals COMMA Variable
 | Variable
 | /* ε */ ;
 
-ClassDecl ::= CLASS IDENTIFIER Ext Imp LLAVEIZQ ClassField LLAVEDER;
+ClassDecl ::= CLASS IDENTIFIER:n1 Ext Imp LLAVEIZQ ClassField LLAVEDER{: 
+        
+    :};
 
 Ext ::= EXTENDS IDENTIFIER
 | /* ε */ ;
@@ -165,15 +175,29 @@ ExprPrint ::= ExprPrint COMMA Expr
 | Expr ;
 
 Expr ::= LValue ASIGNATION Expr
-| Constant
+| Constant:e {:
+  RESULT=e;
+  :}
 | LValue
 | THIS
 | Call 
 | PARENIZQ Expr PARENDER
-| Expr PLUS Expr
-| Expr MINUS Expr
-| Expr MULTI Expr
-| Expr DIV Expr
+| Expr1:e PLUS Expr:f {:
+  numero casa =new numero();
+  RESULT=casa.isStringDoubleEnt(e.toString(),f.toString(),"+");
+  :}
+| Expr1:e MINUS Expr:f{:
+  numero casa =new numero();
+  RESULT=casa.isStringDoubleEnt(e.toString(),f.toString(),"-");
+  :}
+| Expr1:e MULTI Expr:f{:
+  numero casa =new numero();
+  RESULT=casa.isStringDoubleEnt(e.toString(),f.toString(),"*");
+  :}
+| Expr1:e DIV Expr:f{:
+  numero casa =new numero();
+  RESULT=casa.isStringDoubleEnt(e.toString(),f.toString(),"/");
+  :}
 | Expr MOD Expr
 | MINUS Expr
 | Expr MINOR Expr
@@ -191,7 +215,14 @@ Expr ::= LValue ASIGNATION Expr
 | READLINE PARENIZQ PARENDER
 | MALLOC PARENIZQ Expr PARENDER ;
 
-LValue ::= IDENTIFIER
+Expr1::=Constant:e{:
+  RESULT=e;
+  :}
+|IDENTIFIER;
+
+LValue ::= IDENTIFIER:n{:
+  RESULT=n;
+  :}
 | Expr POINT IDENTIFIER
 | Expr CORCHIZQ Expr CORCHDER ;
 
@@ -207,8 +238,12 @@ LibCall ::= GETBYTE PARENIZQ Expr PARENDER
 Actuals ::= ExprPrint
 | /* ε */ ;
 
-Constant ::= ENTERO
-| DOBLE
+Constant ::= ENTERO:e {:
+RESULT=e;
+  :}
+| DOBLE:e {:
+RESULT=e;
+  :}
 | BOOLEAN
 | CADENA
 | NULL 
