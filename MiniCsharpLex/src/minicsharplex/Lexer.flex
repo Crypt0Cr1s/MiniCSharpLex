@@ -91,7 +91,7 @@ in = "/*" [^*]+
     //{C} {tokens.add("palabraclave: " + yytext() + " en linea: "+(yyline+1)+ " columna: "+ (yycolumn + 1) + " - " + ((yycolumn+1) + yylength() - 1)); return symbol(sym.CLAVE);}
     ////////////////////////////////////////////////////////////////////////////////
      
-    "#include" "<"[a-zA-Z][a-zA-Z0-9_]*"."[a-z]+ ">" {/*se ignoran los include*/}
+    "include" [^*] ~ ">" { /* Ignore */} 
     //////////////////////////////////////////////////////////////////////////////////
     "void" { return symbol(sym.VOID,new String(yytext())); }
     "int" { return symbol(sym.INT,new String(yytext())); }
