@@ -175,7 +175,7 @@ public class Tsimbols {
                          String tipo;
                         if(RevFloat(Resultado))
                         {                        
-                            tipo = "integer";
+                            tipo = "int";
                         }
                         else
                         {
@@ -217,7 +217,7 @@ public class Tsimbols {
                         {
                             if(RevFloat(Valor))
                             {
-                                tipo = "integer";
+                                tipo = "int";
                             }
                             else
                             {
@@ -409,8 +409,8 @@ public class Tsimbols {
                                     v_tipos.addAll(Arrays.asList(t_var.get(i).split("&")));
                                     int f = i+1;
                                     switch(v_tipos.get(1)){
-                                        case "integer":
-                                            if (tipo_aux.compareTo("integer")!=0) {
+                                        case "int":
+                                            if (tipo_aux.compareTo("int")!=0) {
                                     String out2 = tipo.get(1);
                                     System.err.println("El parámetro: "+ f + " no cumple con la firma, se esperaba: "+out2+" para: "+aux.vars);                                                
                                             }
@@ -479,7 +479,7 @@ public class Tsimbols {
           { 
           switch(v_tipos.get(1)){
               case "int":
-                  if (tipo.toString().compareTo("integer")!=0) {
+                  if (tipo.toString().compareTo("int")!=0) {
                       System.err.println("La instrucción return está tratando de regresar: Int, se esperaba: "+tipo);
                   }
                   break;
