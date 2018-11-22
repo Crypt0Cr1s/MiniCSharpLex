@@ -12,6 +12,7 @@ import java.util.Stack;
  * @author cristobal
  */
 public class Solucionador {
+    
     private static boolean Stop;
     
     String Operacion;
@@ -145,8 +146,8 @@ public static String Operar(String Op)
   
   public String getResult()
   {
-return Operacion;
-  }
+      return Operacion;
+}
 
     
 }

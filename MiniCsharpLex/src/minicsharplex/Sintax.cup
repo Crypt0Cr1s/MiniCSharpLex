@@ -7,7 +7,7 @@ package minicsharplex;
 import java_cup.runtime.*;
 import java.io.FileReader;
 import java.util.ArrayList;
-import minicsharplex.numero;
+
 /* Codigo del parser, se copia integramente a la clase final.
     Agregamos el manejo de errores. */
 parser code {:
@@ -52,7 +52,7 @@ parser code {:
 
    Terminales que no tienen un valor son listados primero, los terminales que
    tienen un valor como los enteros son listados en la segunda o demas lineas. */
-terminal Object INCLUDE,ARCHIVO,PLUS, MINUS, MULTI, DIV, MOD, MINOR, MINOREQ ,MAJOR, MAJOREQ, ASIGNATION, EQUAL, NOTEQUAL, AND, OR, ADMIRATION, SEMICOLON, COMMA, POINT, CORCHIZQ, CORCHDER, PARENIZQ, PARENDER, LLAVEIZQ, LLAVEDER, CORCHDOBLE, VOID, INT, DOUBLE, BOOL, STRING, CLASS, INTERFACE, NULL, THIS, EXTENDS, IMPLEMENTS, FOR, WHILE, IF, ELSE, RETURN, BREAK, NEW, NEWARRAY, PRINT, READINT, READLINE, MALLOC, HEX, ENTERO, BOOLEAN, CADENA, DOBLE, IDENTIFIER, GETBYTE, SETBYTE;
+terminal Object INCLUDE,ARCHIVO,PLUS, MINUS,CONSTANTE, MULTI, DIV, MOD, MINOR, MINOREQ ,MAJOR, MAJOREQ, ASIGNATION, EQUAL, NOTEQUAL, AND, OR, ADMIRATION, SEMICOLON, COMMA, POINT, CORCHIZQ, CORCHDER, PARENIZQ, PARENDER, LLAVEIZQ, LLAVEDER, CORCHDOBLE, VOID, INT, DOUBLE, BOOL, STRING, CLASS, INTERFACE, NULL, THIS, EXTENDS, IMPLEMENTS, FOR, WHILE, IF, ELSE, RETURN, BREAK, NEW, NEWARRAY, PRINT, READINT, READLINE, MALLOC, HEX, ENTERO, BOOLEAN, CADENA, DOBLE, IDENTIFIER, GETBYTE, SETBYTE;
 
    
 /* No terminales usados en la seccion gramatical. 
@@ -60,7 +60,7 @@ terminal Object INCLUDE,ARCHIVO,PLUS, MINUS, MULTI, DIV, MOD, MINOR, MINOREQ ,MA
    Primero se lista los no terminales que tienen un valor Object y despues
    se lista los no terminales que tienen un entero. Un Object se refiere a que
    no tienen tipo, pudiendo ser entero o String. */
-non terminal Object     Start,Include, Program, Decl, VariableDecl, Variable, Type, Expr1,FunctionDecl, FuncCont, Formals, ClassDecl, Ext, Imp, ClassField, ImpID, Field, InterfaceDecl, InterfaceProt,  Prototype, ProtCont, StmtBlock, StmtCont,StmtEnd, Stmt, IfStmt, StmtExpr, ElseIfStmt, WhileStmt, ForStmt, ReturnStmt, BreakStmt, PrintStmt, ExprPrint,  Expr, LValue, Call, CallCont, LibCall, Actuals,  Constant;
+non terminal Object     Start,Include, FormalsCont, Program, Decl, VariableDecl, Variable, Type, Expr1,FunctionDecl, FuncCont, Formals, ClassDecl, Ext, Imp, ClassField, ImpID, Field, InterfaceDecl, InterfaceProt,  Prototype, ProtCont, StmtBlock, StmtCont,StmtEnd, Stmt, IfStmt, StmtExpr, ElseIfStmt, WhileStmt, ForStmt, ReturnStmt, BreakStmt, PrintStmt, ExprPrint,  Expr, LValue, Call, CallCont, LibCall, Actuals,  Constant;
 
    
 
@@ -73,95 +73,93 @@ precedence left IDENTIFIER;
 
 /* ------------------- Seccion de la gramatica ------------------------ */
    
-Start ::=Program ;
 
 Program ::= Program Decl
 | /* ε */ ;
-
-
 
 Decl ::= VariableDecl
 | FunctionDecl
 | ClassDecl
 | InterfaceDecl
-|error SEMICOLON
-|error LLAVEDER ;
+| error SEMICOLON
+| error LLAVEDER ;
 
-VariableDecl ::= Variable SEMICOLON ;
+VariableDecl ::=  Variable SEMICOLON 
+| CONSTANTE Variable SEMICOLON ;
 
-Variable ::= Type:t IDENTIFIER:n{:
-            if (!Env.put(n,t)) System.out.println(" La variable " + n + " se encuentra declarara en el ambito actual"); 
-                    
-            :};
+Variable ::=   Type:t IDENTIFIER:n {: RESULT = ""; RESULT=RESULT.toString().concat("["+n+","+t+"]");if (!Tsimbols.put(n,"v",t))  System.out.println("  La variable " + n + " ya se encuentra declarada en el ambito actual"); :} ;
 
-Type ::= INT{: RESULT = "int";:}
+Type ::= INT {: RESULT = "int"; :}
 | DOUBLE {: RESULT = "double"; :}
 | BOOL {: RESULT = "bool"; :}
 | STRING {: RESULT = "string"; :}
-| IDENTIFIER:n1 {: RESULT = n1.toString(); :}
+| IDENTIFIER:h {: RESULT = h.toString(); :}
+| VOID
 | Type CORCHDOBLE ;
 
-FunctionDecl ::= Type FuncCont
-| VOID FuncCont;
+FunctionDecl ::= FuncCont:n;
 
-FuncCont ::= IDENTIFIER PARENIZQ Formals PARENDER StmtBlock ;
+FuncCont ::= Type:t IDENTIFIER:n {: if(!Tsimbols.put(n.toString(),"m",t)) {System.out.println("Este metodo ya existe");} else {System.out.print(" Entradas de Metodo: "+n); Tsimbols.push();}:} PARENIZQ Formals:p {:Tsimbols.parametros(n.toString(),p);:} PARENDER StmtBlock:v {:Tsimbols.mreturn(t.toString(),v);System.out.print(" Salida de Bloque"); Tsimbols.pop();System.out.print(" Saliendo de Metodo " +n); Tsimbols.pop();:} ;
 
-Formals ::= Formals COMMA Variable
-| Variable
+Formals ::= FormalsCont:a Variable:b {: if(a==null){a="";a = a.toString().concat(b.toString());}else{a = a.toString().concat(b.toString());} RESULT = a; :}
 | /* ε */ ;
 
-ClassDecl ::= CLASS IDENTIFIER:a Ext:b {:
-    if(b == null)
+FormalsCont ::= FormalsCont:a Variable:b COMMA {:if(a==null){a="";}; a = a.toString().concat(b+"-"); RESULT = a;:}
+| /* ε */ ;
+
+ClassDecl ::= CLASS IDENTIFIER:h Ext:z  
+{:
+    if(z == null)
     {
-        if(Env.putClass(a.toString(),null,"class") != 0)
+        if(Tsimbols.putClass(h.toString(),null,null) != 0)
         {
-            System.out.println("  La clase " + a + " ya ha sido declarada en el ambito actual");
+            System.out.println("  La clase " + h + " ya se encuentra declarada en el ambito actual");
         }
     }
     else
     {
-        switch(Env.putClass(a.toString(),b.toString(),"class"))
+        switch(Tsimbols.putClass(h.toString(),z.toString(),null))
         {
             case 1:
-            System.out.println("  La clase " + a + " ya ha sido declarada en el ambito actual");
+            System.out.println("  La clase " + h + " ya se encuentra declarada en el ambito actual");
             break;
 
             case 2:
-            System.out.println("  La clase " + b + " no existe en el ambito actual");
+            System.out.println("  La clase " + z + " no existe en el ambito actual");
             break;                
         } 
     }
-:}
-Imp:c
+:} 
+Imp LLAVEIZQ ClassField LLAVEDER
+{:
+      System.out.print("  Saliendo de la clase: "+h);
+      Tsimbols.pop();
+ :} ;
+
+Ext ::= EXTENDS IDENTIFIER:n1 {: RESULT = n1; :}
+| /* ε */ ;
+
+Imp ::= IMPLEMENTS ImpID:e
+| /* ε */ ;
+
+ImpID ::= ImpID COMMA IDENTIFIER
+| IDENTIFIER:a
 {:
 
-    if(c == null)
+    if(a == null)
     {
         
     }
     else
     {   
-        boolean R = Env.getInterfaces(c.toString());
+        boolean K = Tsimbols.getInterfaces(a.toString());
 
-        if(R == false)
+        if(K == false)
         {
-            System.out.println("  La interfaz " + c + " no existe en el ambito actual");
+            System.out.println("  La interfaz " + a + " no se encuentra en el ambito actual");
         }
     }
-:} 
-LLAVEIZQ ClassField LLAVEDER{:
-      System.out.print("  Saliendo de la clase: "+a);
-      Env.pop();
-:};
-
-Ext ::= EXTENDS IDENTIFIER:a {: RESULT = a; :}
-| /* ε */ ;
-
-Imp ::= IMPLEMENTS ImpID:a {: RESULT = a; :}
-| /* ε */ ;
-
-ImpID ::= ImpID COMMA IDENTIFIER:e {: RESULT = e; :}
-| IDENTIFIER:e {: RESULT = e; :} ;
+ :} ;
 
 ClassField ::= ClassField Field
 | /* ε */ ;
@@ -169,7 +167,7 @@ ClassField ::= ClassField Field
 Field ::= VariableDecl
 | FunctionDecl ;
 
-InterfaceDecl ::= INTERFACE IDENTIFIER:n1 {: if(Env.putClass(n1.toString(),null,null) != 0) System.out.println(" La interfaz " + n1 + " ya ha sido declarada en el ambito actual"); :} LLAVEIZQ InterfaceProt LLAVEDER ;
+InterfaceDecl ::= INTERFACE IDENTIFIER:n1 {: if(Tsimbols.putClass(n1.toString(),null,null) != 0) System.out.println("  La interfaz " + n1 + " ya se encuentra declarada en el ambito actual"); :} LLAVEIZQ InterfaceProt LLAVEDER ;
 
 InterfaceProt ::= InterfaceProt Prototype
 | /* ε */ ;
@@ -179,24 +177,24 @@ Prototype ::= Type ProtCont
 
 ProtCont ::= IDENTIFIER PARENIZQ Formals PARENDER SEMICOLON ;
 
-StmtBlock ::= LLAVEIZQ StmtCont LLAVEDER 
-            ;
-StmtCont ::= StmtEnd StmtCont
-        |;
+StmtBlock ::= LLAVEIZQ {:System.out.print(" Entrada de Bloque"); Tsimbols.push(); :} StmtCont:p {:RESULT=p;:} LLAVEDER ;
 
-StmtEnd ::=VariableDecl
-|Stmt;
+StmtCont ::= StmtEnd:p StmtCont:q{:if(p!=null){if(q==null){q="";q = q.toString().concat(p.toString());}else {q = q.toString().concat(p.toString());}}; RESULT = q; :}
+| /* ε */ ;
 
-Stmt ::= StmtExpr SEMICOLON
+StmtEnd ::= VariableDecl
+| Stmt:p {:RESULT = p;:} ;
+
+Stmt ::= StmtExpr:m{:RESULT=m;:} SEMICOLON
 | IfStmt
 | WhileStmt
 | ForStmt
 | BreakStmt
-| ReturnStmt
+| ReturnStmt:p {:RESULT = p;:}
 | PrintStmt
 | StmtBlock ;
 
-StmtExpr ::= Expr
+StmtExpr ::= Expr:n {:RESULT=n;:}
 | /* ε */ ;
 
 IfStmt ::= IF PARENIZQ Expr PARENDER Stmt ElseIfStmt ;
@@ -208,27 +206,28 @@ WhileStmt ::= WHILE PARENIZQ Expr PARENDER Stmt ;
 
 ForStmt ::= FOR PARENIZQ StmtExpr SEMICOLON Expr SEMICOLON StmtExpr PARENDER Stmt ;
 
-ReturnStmt ::= RETURN StmtExpr SEMICOLON ;
+ReturnStmt ::= RETURN StmtExpr:p {:RESULT = p;:} SEMICOLON ;
 
 BreakStmt ::= BREAK SEMICOLON ;
 
 PrintStmt ::= PRINT PARENIZQ ExprPrint PARENDER SEMICOLON ;
 
-ExprPrint ::= ExprPrint COMMA Expr
-| Expr ;
+ExprPrint ::= ExprPrint:a COMMA Expr:b {:a = a.toString().concat(","+b.toString()); RESULT = a;:}
+| Expr:n {:RESULT=n.toString();:} ;
 
-Expr ::= LValue:v ASIGNATION Expr:e{: 
-    Env.Validar(v.toString(), e.toString());
+Expr ::= LValue:v ASIGNATION Expr:e 
+{: 
+    Tsimbols.Validar(v.toString(), e.toString());
 :} 
-| Constant:a {:RESULT=a;:}
-| LValue:a {: RESULT = a; :}
+| Constant:e {: RESULT = e; :}
+| LValue:e {: RESULT = e; :}
 | THIS
 | Call 
-| PARENIZQ Expr PARENDER
-| Expr1:e PLUS Expr:f {: RESULT = e + "+" + f; :}
-| Expr1:e MINUS Expr:f {: RESULT = e + "-" + f; :}
-| Expr1:e MULTI Expr:f {: RESULT = e + "*" + f; :}
-| Expr1:e DIV Expr:f {: RESULT = e + "/" + f; :}
+| PARENIZQ Expr:p PARENDER {:RESULT = p;:}
+| Expr1:e1 PLUS Expr:e2 {: RESULT = e1 + "+" + e2; :}
+| Expr1:e1 MINUS Expr:e2 {: RESULT = e1 + "-" + e2; :}
+| Expr1:e1 MULTI Expr:e2 {: RESULT = e1 + "*" + e2; :}
+| Expr1:e1 DIV Expr:e2 {: RESULT = e1 + "/" + e2; :}
 | Expr MOD Expr
 | MINUS Expr
 | Expr MINOR Expr
@@ -246,14 +245,14 @@ Expr ::= LValue:v ASIGNATION Expr:e{:
 | READLINE PARENIZQ PARENDER
 | MALLOC PARENIZQ Expr PARENDER ;
 
-Expr1::=Constant:e{: RESULT = e; :}
-|IDENTIFIER:f {: RESULT = f; :} ;
+Expr1 ::= Constant:e {: RESULT = e; :}
+| IDENTIFIER:e {: RESULT = e; :} ;
 
-LValue ::= IDENTIFIER:n {: RESULT = n; :}
+LValue ::= IDENTIFIER:e {: RESULT = e; :}
 | Expr POINT IDENTIFIER
 | Expr CORCHIZQ Expr CORCHDER ;
 
-Call ::= IDENTIFIER PARENIZQ Actuals PARENDER
+Call ::= IDENTIFIER:n {:if(!Tsimbols.get_name(n.toString(), "m")){ System.out.println("***PELIGRO*** ==> El Método: " + n + " no ha sido declarado");}:} PARENIZQ Actuals:n1 {:Tsimbols.tipos(n.toString(),n1.toString());:} PARENDER
 | Expr POINT IDENTIFIER CallCont
 | Expr POINT LibCall CallCont ;
 
@@ -262,12 +261,11 @@ CallCont ::= PARENIZQ Actuals PARENDER ;
 LibCall ::= GETBYTE PARENIZQ Expr PARENDER 
 | SETBYTE PARENIZQ Expr COMMA Expr PARENDER ;
 
-Actuals ::= ExprPrint
+Actuals ::= ExprPrint:n {:System.out.println(n); RESULT=n;:}
 | /* ε */ ;
 
-Constant ::= ENTERO:e {: RESULT = e; :}
-| DOBLE:e {: RESULT = e; :}
-| BOOLEAN
-| CADENA:e {: RESULT = e; :}
-| NULL 
-| HEX; 
+Constant ::= ENTERO:e {: RESULT = e + "&int"; :}
+| DOBLE:e {: RESULT = e + "&dob"; :}
+| BOOLEAN:e {: RESULT = e + "&bool"; :}
+| CADENA:e {: RESULT = e + "&str"; :}
+| NULL {:RESULT = "&null"; :} ;

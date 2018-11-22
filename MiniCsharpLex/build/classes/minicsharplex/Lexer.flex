@@ -91,7 +91,7 @@ in = "/*" [^*]+
     //{C} {tokens.add("palabraclave: " + yytext() + " en linea: "+(yyline+1)+ " columna: "+ (yycolumn + 1) + " - " + ((yycolumn+1) + yylength() - 1)); return symbol(sym.CLAVE);}
     ////////////////////////////////////////////////////////////////////////////////
      
-    "#include" "<"[a-zA-Z][a-zA-Z0-9_]*"."[a-z]+ ">"{/*se ignoran los include*/}
+    "#include" "<"[a-zA-Z][a-zA-Z0-9_]*"."[a-z]+ ">" {/*se ignoran los include*/}
     //////////////////////////////////////////////////////////////////////////////////
     "void" { return symbol(sym.VOID,new String(yytext())); }
     "int" { return symbol(sym.INT,new String(yytext())); }
@@ -118,6 +118,7 @@ in = "/*" [^*]+
     "Malloc" {return symbol(sym.MALLOC,new String(yytext()));}
     "GetByte" {return symbol(sym.GETBYTE,new String(yytext()));}
     "Setbyte" {return symbol(sym.SETBYTE,new String(yytext()));}
+    "const" {return symbol(sym.CONSTANTE, yytext()); }
 
     ///////////////////////////////////////////////////////////////////////
     [a-zA-Z][a-zA-Z0-9_]* { if(yytext().length()<=31){return symbol(sym.IDENTIFIER,new String(yytext()));} else{String cortador=yytext().substring(0,31); /*System.out.print("identificador truncado " + cortador + " en linea: "+(yyline+1)+ " columna: "+ (yycolumn + 1) + " - " + ((yycolumn+1) + yylength() - 1));*/ return symbol(sym.IDENTIFIER,new String(yytext()));}}

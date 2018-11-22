@@ -10,13 +10,24 @@ package minicsharplex;
  * @author cristobal
  */
 public class Info {
-    String type;
+   String type;
+    String elementType;
+    String vars = "";
+    String ambito = "";
     Object value;
     
-    public  Info(String tipo, Object val)
+    public  Info(String tipo,String tipoDato, Object val)
     {
         type = tipo;
-        value = val;        
+        value = val;
+        elementType = tipoDato;
+    }
+    
+    public Info()
+    {
+        this.value = "??";
+        this.type = "??";
+        this.elementType = "??";        
     }
     
    public String getType()

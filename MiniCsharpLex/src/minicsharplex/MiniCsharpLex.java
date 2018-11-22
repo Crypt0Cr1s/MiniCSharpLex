@@ -5,8 +5,10 @@
  */
 package minicsharplex;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
@@ -32,8 +34,8 @@ public class MiniCsharpLex {
         
         Scanner terminal = new Scanner(System.in);
         
-        //System.out.print("Ingrese la ruta del archivo a analizar: ");
-        String path = "/home/cristobal/p1.txt";
+        System.out.print("Ingrese la ruta del archivo a analizar: ");
+        String path = terminal.next();
         String [] path2 ={path};
         
         Reader reader;
@@ -48,25 +50,59 @@ public class MiniCsharpLex {
         
         //abro codigo para leer archivo y obtener una lista con los tokens a volcar. 
         
-       
+        String Valor;
         // codigo para volcar lista tokens a un archivo.
-        /* System.out.print("Ingrese el nombre del archivo a salir: ");
+         System.out.print("\n");
+        System.out.print("Ingrese el nombre del archivo a salir: ");
         String archivosal = terminal.next();
-        archivosal = archivosal+".out"; 
+        archivosal = archivosal+".txt"; 
+      
+        FileWriter ef = new FileWriter(archivosal);
+        BufferedWriter e = new BufferedWriter(ef);
+        e.write("IDENTIFICADOR                 TIPO                DESCRIPCION         VALOR               AMBITO");
+        e.newLine();
         
-       /* PrintWriter escribir = new PrintWriter(archivosal, "UTF-8");
-        /
-        for (int i = 0;i <= (tokens.size()-1);i++){
-            String agregar=tokens.get(i);
-            escribir.println(agregar);
+        
+        
+        for (int i = 0; i < Tsimbols.output.size(); i++) 
+            {
+               Salida aux = Tsimbols.output.get(i);
+               String Tipo = aux.simbolo.type;
+               String Descripcion = aux.simbolo.elementType;
+               if(aux.simbolo.value != null)
+               {
+                    Valor = aux.simbolo.value.toString();
+               }
+               else
+               {
+                   Valor = "??";
+               }
+               String Current = aux.simbolo.ambito;
+               e.write(aux.nombre + Output(aux.nombre,30,0) + Tipo +Output(Tipo, 50,30)+ Descripcion+Output(Descripcion, 70,50)+Valor+Output(Valor, 90,70)+Current);
+               e.newLine();
+            }
+            e.close();
+            ef.close(); 
+       
             
-        }
-        escribir.close();*/
+            
         
         
        
         
         
+    }
+    
+    static public  String Output(String size, int separador, int columnas)
+    {
+            String nuevoEspacio = "";
+            int t = size.length();
+            int ciclos = separador - (t+columnas);
+            for (int i = 0; i < ciclos; i++) 
+            {
+                nuevoEspacio+=" ";
+            }
+            return nuevoEspacio;
     }
    
     
