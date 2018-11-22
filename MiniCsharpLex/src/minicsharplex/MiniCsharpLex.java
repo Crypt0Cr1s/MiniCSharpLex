@@ -59,7 +59,7 @@ public class MiniCsharpLex {
       
         FileWriter ef = new FileWriter(archivosal);
         BufferedWriter e = new BufferedWriter(ef);
-        e.write("IDENTIFICADOR                 TIPO                DESCRIPCION         VALOR               AMBITO");
+        e.write("Identifier                 Type                Description         Valor               Scope");
         e.newLine();
         
         

@@ -158,7 +158,12 @@ public class Tsimbols {
             Info aux = (Info) (top.table.get(Lvalue));
             if(Valor.contains("+") || Valor.contains("-") || Valor.contains("*") || Valor.contains("/"))
             {
+                if (Valor.contains("\"")){
+                
+                }
+                else{
                 String Resultado = Resolve(Valor);
+                
 
                 if(Resultado.equals("-1"))
                 {
@@ -201,6 +206,7 @@ public class Tsimbols {
                            System.out.println("  Error: No se puede asignar un valor a la variable " +Lvalue + " -> " + aux.type + " & " + tipo + " no son compatibles" + " -> Ambito Actual: "+top);   
                         }
                     }
+                }
                 }
             }
             else
@@ -341,7 +347,8 @@ public class Tsimbols {
     public static String Resolve(String S)
     {
         Postfijo Stage1 = new Postfijo(S);
-        String Postfijo = Stage1.getPostFix();    
+        String Postfijo = Stage1.getPostFix();
+        
         Solucionador Stage2 = new Solucionador(Postfijo);
         return Stage2.getResult();
     }
