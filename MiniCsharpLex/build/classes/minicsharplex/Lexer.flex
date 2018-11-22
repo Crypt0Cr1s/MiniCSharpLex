@@ -90,7 +90,7 @@ in = "/*" [^*]+
     {Double} { return symbol(sym.DOBLE,new Double(yytext()));}
     //{C} {tokens.add("palabraclave: " + yytext() + " en linea: "+(yyline+1)+ " columna: "+ (yycolumn + 1) + " - " + ((yycolumn+1) + yylength() - 1)); return symbol(sym.CLAVE);}
     ////////////////////////////////////////////////////////////////////////////////
-     
+     "#" { /* Ignore */}
     "include" [^*] ~ ">" { /* Ignore */} 
     //////////////////////////////////////////////////////////////////////////////////
     "void" { return symbol(sym.VOID,new String(yytext())); }
